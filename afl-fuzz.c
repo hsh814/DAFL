@@ -5470,7 +5470,12 @@ static u8 delete_files(u8* path, u8* prefix) {
 
   closedir(d);
 
-  return !!rmdir(path);
+  u32 path_len = strlen(path);
+  if (path_len > 7 && path[path_len-1]=='s' && path[path_len-2]=='e' && path[path_len-3]=='h' &&
+          path[path_len-4]=='s' && path[path_len-5]=='a' && path[path_len-6]=='r' && path[path_len-7]=='c') {
+    return 0;
+  }
+  else return !!rmdir(path);
 
 }
 
@@ -11114,7 +11119,7 @@ EXP_ST void setup_dirs_fds(void) {
   /* All recorded crashes. */
 
   tmp = alloc_printf("%s/crashes", out_dir);
-  if (mkdir(tmp, 0700)) PFATAL("Unable to create '%s'", tmp);
+  if (mkdir(tmp, 0700)) {}//PFATAL("Unable to create '%s'", tmp);
   ck_free(tmp);
 
   /* All recorded normals. */
